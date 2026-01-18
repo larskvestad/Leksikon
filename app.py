@@ -43,7 +43,6 @@ if val == "Leksikon":
         tid_col = 'Tidsperiode'
         sted_col = 'Geografisk område'
         kjelde_col = 'Kjelde'
-        status_col = 'Status'
 
         # Sjekk om Status-kolonnen finst, viss ikkje viser vi alt
         if status_col in df.columns:
