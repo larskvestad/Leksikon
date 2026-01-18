@@ -26,33 +26,43 @@ with st.sidebar:
     st.divider()
     st.info("Dette er eit verktøy for å lære terminologi i eigedomsrettshistorie.")
 
-# --- SIDE 1: LEKSIKON ---
+# --- HOVUDSIDE: LEKSIKON ---
 if val == "Leksikon":
     st.title("📜 Retthistorisk Leksikon")
     
     if df.empty:
-        st.warning("Fann ingen data. Sjekk at CSV-lenka i koden er rett og at arket er publisert.")
+        st.warning("Fann ingen data. Sjekk at CSV-lenka er rett.")
     else:
-        # Vi sjekkar kva kolonnar som faktisk finst (Google Sheets kan variere litt)
-        # Vi antar: B=Term, C=Definisjon, D=Tid, E=Geografi, F=Kjelde, H=Status
+        # VIKTIG: Vi vaskar kolonnenamna for å fjerne mellomrom og rart rusk
+        df.columns = [c.strip() for c in df.columns]
         
-        # Sørg for at vi berre viser godkjende
-        if 'Status' in df.columns:
-            godkjende = df[df['Status'].str.contains('Godkjent', na=False, case=False)]
+        # Her definerer vi kva kolonnar vi leitar etter. 
+        # Sjekk at desse namna er IDENTISKE med overskriftene i Google Sheets!
+        term_col = 'Term'
+        def_col = 'Forståing/Definisjon'
+        tid_col = 'Tidsperiode'
+        sted_col = 'Geografisk område'
+        kjelde_col = 'Kjelde'
+        status_col = 'Status'
+
+        # Sjekk om Status-kolonnen finst, viss ikkje viser vi alt
+        if status_col in df.columns:
+            godkjende = df[df[status_col].str.contains('Godkjent', na=False, case=False)]
         else:
-            godkjende = df # Viss statuskolonnen manglar, viser vi alt førebels
+            st.error(f"Fann ikkje kolonnen '{status_col}'. Sjekk overskriftene i Sheets.")
+            godkjende = df
 
         sok = st.text_input("🔍 Søk i terminologien:", placeholder="T.ex. Skyldmark...")
 
         if not godkjende.empty:
-            # Filtermekanisme
-            resultat = godkjende[godkjende.iloc[:, 1].str.contains(sok, case=False, na=False)] # Sjekkar kolonne B (Term)
+            # Filtrer basert på søk i Term-kolonnen
+            resultat = godkjende[godkjende[term_col].str.contains(sok, case=False, na=False)]
 
             for _, row in resultat.iterrows():
-                with st.expander(f"**{row.iloc[1]}**"): # Viser Term
-                    st.write(f"**Definisjon:** {row.iloc[2]}")
-                    st.write(f"**Periode:** {row.iloc[3]} | **Område:** {row.iloc[4]}")
-                    st.write(f"**Kjelde:** {row.iloc[5]}")
+                with st.expander(f"**{row[term_col]}**"):
+                    st.write(f"**Definisjon:** {row[def_col]}")
+                    st.write(f"**Periode:** {row[tid_col]} | **Område:** {row[sted_col]}")
+                    st.write(f"**Kjelde:** {row[kjelde_col]}")
         else:
             st.info("Ingen ord er godkjende i databasen ennå.")
 
