@@ -6,8 +6,8 @@ st.set_page_config(page_title="Eigedomsretts-leksikon", layout="wide")
 
 # LENKER - Hugs å byte ut desse med dine eigne!
 # For å få CSV-lenka: Google Sheets -> Fil -> Del -> Publiser på Internett -> Vel 'Svar' og '.csv'
-SHEET_URL = "https://docs.google.com/spreadsheets/d/e/DIN_ID_HER/pub?gid=DIN_GID_HER&single=true&output=csv"
-FORMS_URL = "https://forms.gle/DIN_SKJEMA_LENKE"
+SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ3_o1k4DyG3BvBL6OI_WbQVV8BwCeDGABEg5BzeKvuGD0q1a3ZzK-nv7XH9FwnkGJZs0lRSbOIbLOj/pub?gid=1953725999&single=true&output=csv"
+FORMS_URL = "https://docs.google.com/forms/d/e/1FAIpQLSft-iCsGIh5aagM_9EuFebWRXo51dKWQUwI40A9KBG7WdXIIA/viewform?usp=header"
 
 def last_data():
     try:
